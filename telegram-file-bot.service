@@ -1,0 +1,32 @@
+[Unit]
+Description=Telegram File Distribution Bot
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=telegram-bot
+Group=telegram-bot
+WorkingDirectory=/opt/telegram-file-bot
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /opt/telegram-file-bot/bot.py
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=telegram-file-bot
+
+# Security settings
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/telegram-file-bot/files /opt/telegram-file-bot/logs
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target
